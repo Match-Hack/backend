@@ -15,21 +15,12 @@ db.once('open', () => console.log('Connected to Database'));
 
 const app: Express = express();
 
-/*app.use(cors(
-  {
-    origin: ['http://localhost:3000'],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Referer'],
-  }
-))*/
-
 import poapRouter from './routes/POAP';
 import newUserRouter from './routes/newUser';
 import likeRouter from './routes/like';
 
 app.use("/poap",poapRouter);
 app.use("userRouter",newUserRouter);
-app.use("/likerouter", likeRouter);
+app.use("/like", likeRouter);
 
 export default app;
