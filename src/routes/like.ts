@@ -2,7 +2,7 @@
 import express from 'express';
 import { Router } from 'express';
 import like from '../models/like';
-
+import match from '../models/match';
 const router: Router = Router();
 router.use(express.json());
 
@@ -16,7 +16,10 @@ router.post("/like", async (req, res) => {
     const isMatch = await checkMatch(from, to);
 
     if (isMatch) {
+        const matchdoc = new match({ from, to });
+        await matchdoc.save();
       res.status(201).json({ newDoc, message: "It's a match!" });
+
     } else {
       res.status(201).json({ newDoc, message: "Like successful" });
     }
