@@ -1,0 +1,7 @@
+POST http://127.0.0.1:8080/poap/commonPoaps
+Content-Type: application/json
+
+{
+    "lens1" : "lejamon.lens",
+    "lens2": "adamd.lens"
+}
