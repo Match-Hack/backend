@@ -54,18 +54,6 @@ router.post("/deleteUser",async(req:Request, res:Response)=>{
     }
 })
 
-router.get("/notificationByAddress/:lensProfile", async (req: Request, res: Response) => {
-    try {
-        let results = await user.find({
-            address: req.params.address
-        });
-        res.send(results).status(200);
-    } catch (error) {
-        console.log("error in the get request interestByAddress")
-        res.status(500).json({
-            message: error
-        });
-    }
-});
+
 
 export default router;
