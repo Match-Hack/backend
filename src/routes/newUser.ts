@@ -15,23 +15,31 @@ router.use(json());
 
 router.post("/newUser", async (req: Request, res: Response) => {
     try {
-        const doc = new user({
-            lensProfile: req.body.lensProfile,
-            hackathon: req.body.hackathon,
-            github: req.body.github,
-            twitter: req.body.twitter,
-            telegram: req.body.telegram,
-            skills: req.body.skills,
-            bio: req.body.bio
+        const existingUser = await user.findOne({
+          lensProfile: req.body.lensProfile,
+          hackathon: req.body.hackathon
         });
+    
+        if (existingUser) {
+          return res.status(400).json({ message: "User with matching lens and hackathon already exists" });
+        }
+    
+        const doc = new user({
+          lensProfile: req.body.lensProfile,
+          hackathon: req.body.hackathon,
+          github: req.body.github,
+          twitter: req.body.twitter,
+          telegram: req.body.telegram,
+          skills: req.body.skills,
+          bio: req.body.bio
+        });
+    
         const newDoc = await doc.save();
         res.status(201).json(newDoc);
-    } catch (error) {
-        console.log("error in the post request newUser")
-        res.status(500).json({
-            message: error
-        });
-    }
+      } catch (error) {
+        console.log("error in the post request newUser");
+        res.status(500).json({ message: error });
+      }
 });
 
 router.post("/deleteUser",async(req:Request, res:Response)=>{
