@@ -20,7 +20,7 @@ import newUserRouter from './routes/newUser';
 import likeRouter from './routes/like';
 
 app.use("/poap",poapRouter);
-app.use("userRouter",newUserRouter);
+app.use("/user",newUserRouter);
 app.use("/like", likeRouter);
 
 export default app;

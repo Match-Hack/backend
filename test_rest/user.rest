@@ -1,0 +1,12 @@
+POST http://127.0.0.1:8080/user/newUser
+Content-Type: application/json
+
+{
+    "lensProfile" : "adamd.lens",
+    "hackathon": "ETHIstanbul",
+    "github":"adul", 
+    "twitter":"adamul",
+    "telegram":"adamul#1234",
+    "bio":"I am a developer",
+    "skills":"java, python, solidity"
+}

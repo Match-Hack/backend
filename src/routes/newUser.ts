@@ -27,7 +27,7 @@ router.post("/newUser", async (req: Request, res: Response) => {
         const newDoc = await doc.save();
         res.status(201).json(newDoc);
     } catch (error) {
-        console.log("error in the post request newInterest")
+        console.log("error in the post request newUser")
         res.status(500).json({
             message: error
         });
