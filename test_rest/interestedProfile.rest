@@ -2,5 +2,6 @@ POST http://127.0.0.1:8080/profile/profileFiltered
 Content-Type: application/json
 
 {
-    "hackathonName": "ETHIstanbul"
+    "hackathonName": "ETHIstanbul",
+    "lenshandle" : "lejamon.lens"
 }

@@ -33,20 +33,22 @@ const query = gql`query MyQuery($profileNames: [String!]) {
 `;
 // function to find all the lens profile that are in the same hackathon
 
-async function findLensProfileInSameHackathon(hackathonName: string) {
+async function findLensProfileInSameHackathon(hackathonName: string, lenshandle: string) {
     try {
-        const users = await user.find({ hackathon: hackathonName });
-        const lensProfiles = users.map((user: { lensProfile: string }) => user.lensProfile);
-        return lensProfiles;
+      const users = await user.find({ hackathon: hackathonName, lensProfile: { $ne: lenshandle } });
+      console.log(users); 
+      const profiles = users.map((user: { lensProfile: string }) => user.lensProfile);
+      return profiles;
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-}
+  }
 
 router.post("/profileFiltered", async (req: Request, res: Response) => {   
     try {
         const hackathonName = req.body.hackathonName;
-        const lensProfiles = await findLensProfileInSameHackathon(hackathonName);
+        const lenshandle = req.body.lenshandle;
+        const lensProfiles = await findLensProfileInSameHackathon(hackathonName, lenshandle);
         console.log(lensProfiles);
         const variables = {
             profileNames: lensProfiles
@@ -60,6 +62,9 @@ router.post("/profileFiltered", async (req: Request, res: Response) => {
     }
     catch (error) {
         console.log(error);
+        res.status(500).json({
+            error: error
+        }); 
     }
 
 });
