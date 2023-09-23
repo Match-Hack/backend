@@ -21,19 +21,19 @@ const brandSchema: Schema<User> = new Schema<User>({
   },
   github: {
     type: String,
-    required: true
+    required: false
   },
   twitter: {
     type: String,
-    required: true
+    required: false
   },
   telegram: {
     type: String,
-    required: true
+    required: false
   },
   bio: {
     type: String,
-    required: true
+    required: false
   }
 }, {
   collection: 'user' // Specify the collection name
