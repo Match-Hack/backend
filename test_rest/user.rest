@@ -3,10 +3,5 @@ Content-Type: application/json
 
 {
     "lensProfile" : "lejamon.lens",
-    "hackathon": "ETHIstanbul",
-    "github":"adul", 
-    "twitter":"adamul",
-    "telegram":"adamul#1234",
-    "bio":"I am a developer",
-    "skills":"java, python, solidity"
+    "hackathon": "ETHIstanbul"
 }
