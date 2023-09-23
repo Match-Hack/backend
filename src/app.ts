@@ -18,9 +18,11 @@ const app: Express = express();
 import poapRouter from './routes/POAP';
 import newUserRouter from './routes/newUser';
 import likeRouter from './routes/like';
+import profilFilter from './routes/profileFiltered';
 
 app.use("/poap",poapRouter);
 app.use("/user",newUserRouter);
 app.use("/like", likeRouter);
+app.use("/profile", profilFilter);
 
 export default app;

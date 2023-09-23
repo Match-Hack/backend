@@ -2,7 +2,7 @@ POST http://127.0.0.1:8080/user/newUser
 Content-Type: application/json
 
 {
-    "lensProfile" : "adamd.lens",
+    "lensProfile" : "lejamon.lens",
     "hackathon": "ETHIstanbul",
     "github":"adul", 
     "twitter":"adamul",
