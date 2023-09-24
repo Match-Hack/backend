@@ -80,6 +80,7 @@ const urqlClient= new Client(
 
 async function findLensProfileInSameHackathon(hackathonName: string, lenshandle: string) {
     try {
+        console.log("lenshandle : ", lenshandle);
       const users = await user.find({ hackathon: hackathonName, lensProfile: { $ne: lenshandle } });
       console.log(users); 
       const profiles = users.map((user: { lensProfile: string }) => user.lensProfile);
