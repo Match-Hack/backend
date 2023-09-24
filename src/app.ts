@@ -16,10 +16,11 @@ db.once('open', () => console.log('Connected to Database'));
 const app: Express = express();
 app.use(cors(
     {
-      origin: "https://lens-app-amber.vercel.app",
-      credentials: true,
+      origin: ["https://lens-app-amber.vercel.app","http://lens-app-amber.vercel.app"],
+      credentials: false,
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Referer'],
+      
     }
   ))
 import newUserRouter from './routes/newUser';
