@@ -4,11 +4,11 @@ Match&Hack leverages a robust technology stack to provide users with a seamless 
 
 ## User Interface Flow
 
-### 1. User Authentication with Lens Protocol
+### 1. User Authentication and dashboard with Lens Protocol
 
 - **User Action:** The user initiates the journey by connecting to the Match&Hack platform.
 - **Technology Used:** Lens Protocol
-- **Explanation:** Lens Protocol is employed for user authentication. Users connect securely, ensuring the legitimacy of participants within the platform.
+- **Explanation:** Lens Protocol is employed for user authentication. Users connect securely, ensuring the legitimacy of participants within the platform. He can then parameter his personnal information
 
 ### 2. Selection of a Hackathon
 
