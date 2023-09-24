@@ -14,7 +14,15 @@ db.on('error', (error) => console.error(error));
 db.once('open', () => console.log('Connected to Database'));
 
 const app: Express = express();
-app.use(cors()); // Enable CORS for all routes
+app.use(
+    cors({
+        origin: "https://lens-bu1pxojmt-match-hack.vercel.app",
+        credentials: true,
+        methods: 'GET, POST, PUT, DELETE',
+        allowedHeaders: 'Authorization, Content-Type',
+        exposedHeaders: 'Access-Control-Allow-Origin',
+    })
+);
 import newUserRouter from './routes/newUser';
 import likeRouter from './routes/like';
 import profilFilter from './routes/profileFiltered';
