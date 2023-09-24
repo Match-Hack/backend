@@ -46,15 +46,22 @@ const POAPInfoQuery = gql`query MyQuery($eventIds: [String!]) {
 
 
 export default async function getPOAPs(lens1: string, lens2: string) {
+  console.log("lens1: " + lens1 + " lens2: " + lens2)
   const variables = {
     lens1,
     lens2
   };
+
   const { data, error } = await fetchQuery(commonPOAPQuery, variables);
+  console.log(data); 
+  if (!data) {
+    return null;
+  }
+
   const { user1, user2 } = data;
 
   // check if user1Poaps or user2Poaps is null or undefined
-  if (!user1.poaps || !user2.poaps) {
+  if (!user1?.poaps || !user2?.poaps) {
     return null;
   }
 

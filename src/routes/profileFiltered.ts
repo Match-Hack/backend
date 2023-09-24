@@ -115,6 +115,7 @@ const findLensProfileLiked = async (lenshandle: string) => {
       const items = response.data.profiles.items;
   
       for (const item of items) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const commonPoaps = await getPOAPS(lenshandle, item.handle);
         item.commonPoaps = commonPoaps ? commonPoaps : null;
       }
