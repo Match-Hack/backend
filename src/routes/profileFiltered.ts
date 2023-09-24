@@ -1,4 +1,7 @@
 import { gql } from 'graphql-request';
+import { Client, cacheExchange, fetchExchange } from '@urql/core';
+
+
 import { init, fetchQuery } from "@airstack/node";
 import express, {
     Request,
@@ -12,25 +15,67 @@ router.use(json());
 
 import dotenv from 'dotenv';
 dotenv.config();
+const LENS_API_URL = 'https://api.lens.dev';
 const AIRSTACK_API_KEY = process.env.AIRSTACK_API_KEY ?? "";
 init(AIRSTACK_API_KEY);
 
-const query = gql`query MyQuery($profileNames: [String!]) {
-    Socials(input: {filter: {profileName: {_in: $profileNames}, dappName: {_eq: lens}}, blockchain: ethereum}) {
-      Social {
-        profileName
-        profileBio
-        profileDisplayName
-        profileImage
-        profileUrl
-        dappName
-        userAddress
-        profileTokenAddress
-        profileTokenId
+const urqlClient= new Client(
+    {
+    url: LENS_API_URL,
+    exchanges: [cacheExchange, fetchExchange],
+  }
+  )
+
+  const pingQuery = gql`query Profiles($lensArray : [Handle!]) {
+    profiles(request: { handles: $lensArray, limit: 5 }) {
+      items {
+        name
+        bio
+        attributes {
+          displayType
+          traitType
+          key
+          value
+        }
+        followNftAddress
+        metadata
+        picture {
+          ... on NftImage {
+            contractAddress
+            tokenId
+            uri
+            verified
+          }
+          ... on MediaSet {
+            original {
+              url
+              mimeType
+            }
+          }
+        }
+        handle
+        coverPicture {
+          ... on NftImage {
+            contractAddress
+            tokenId
+            uri
+            verified
+          }
+          ... on MediaSet {
+            original {
+              url
+              mimeType
+            }
+          }
+        }
+      }
+      pageInfo {
+        prev
+        next
+        totalCount
       }
     }
-  }
-`;
+  }`;
 // function to find all the lens profile that are in the same hackathon
 
 async function findLensProfileInSameHackathon(hackathonName: string, lenshandle: string) {
@@ -44,28 +89,22 @@ async function findLensProfileInSameHackathon(hackathonName: string, lenshandle:
     }
   }
 
-router.post("/profileFiltered", async (req: Request, res: Response) => {   
+  router.post("/profileFiltered", async (req: Request, res: Response) => {
     try {
-        const hackathonName = req.body.hackathonName;
-        const lenshandle = req.body.lenshandle;
-        const lensProfiles = await findLensProfileInSameHackathon(hackathonName, lenshandle);
-        console.log(lensProfiles);
-        const variables = {
-            profileNames: lensProfiles
-        }
-        const { data, error } = await fetchQuery(query, variables);
-        const { Socials } = data;
-        const Social = Socials.Social;
-        res.status(200).json({
-            Social: Social
-        })
+      const hackathonName = req.body.hackathonName;
+      const lenshandle = req.body.lenshandle;
+      const lensProfiles = await findLensProfileInSameHackathon(hackathonName, lenshandle);
+      const response = await urqlClient.query(pingQuery, {
+        lensArray: lensProfiles
+      }).toPromise();
+      const items = response.data.profiles.items;
+      console.log("items : ", items); 
+      res.status(200).json(items);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: error
+      });
     }
-    catch (error) {
-        console.log(error);
-        res.status(500).json({
-            error: error
-        }); 
-    }
-
-});
+  });
 export default router;
