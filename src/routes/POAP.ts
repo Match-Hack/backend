@@ -15,7 +15,7 @@ init(AIRSTACK_API_KEY);
 const router = Router();
 router.use(json());
 
-const query = gql`
+const commonPOAPQuery = gql`
 query CommonPOAPs($lens1: Identity!, $lens2: Identity!) {
     user1: Wallet(input: {identity: $lens1, blockchain: ethereum}) {
       poaps(input: {blockchain: ALL}) {
@@ -30,6 +30,34 @@ query CommonPOAPs($lens1: Identity!, $lens2: Identity!) {
   }
 `; // Replace with GraphQL Query
 
+const POAPInfoQuery = gql`query MyQuery($eventArray : [String!]) {
+  Poaps(input: {filter: {eventId: {_in: ["6748", "141910", "69"]}}, blockchain: ALL, limit: 50}) {
+    Poap {
+      eventId
+      poapEvent {
+        eventName
+        startDate
+        endDate
+        country
+        city
+        contentValue {
+          image {
+            extraSmall
+            large
+            medium
+            original
+            small
+          }
+        }
+      }
+    }
+    pageInfo {
+      nextCursor
+      prevCursor
+    }
+  }
+}`;
+
 router.post("/commonPoaps", async (req: Request, res: Response) => {
     try {
 
@@ -37,7 +65,7 @@ router.post("/commonPoaps", async (req: Request, res: Response) => {
             lens1: req.body.lens1,
             lens2: req.body.lens2
         }
-        const { data, error } = await fetchQuery(query, variables);
+        const { data, error } = await fetchQuery(commonPOAPQuery, variables);
         const { user1, user2 } = data;
         // check if there are poap that have matching eventid between user1 and user2
         const user1Poaps = user1.poaps;

@@ -16,7 +16,7 @@ router.post("/like", async (req, res) => {
     const isMatch = await checkMatch(from, to);
 
     if (isMatch) {
-        const matchdoc = new match({ from, to });
+        const matchdoc = new match({ lens1 : from, lens2 :to });
         await matchdoc.save();
       res.status(201).json({ newDoc, message: "It's a match!" });
 
