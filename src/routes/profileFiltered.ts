@@ -93,7 +93,7 @@ async function findLensProfileInSameHackathon(hackathonName: string, lenshandle:
   router.post("/profileFiltered", async (req: Request, res: Response) => {
     try {
       const hackathonName = req.body.hackathonName;
-      const lenshandle = req.body.lenshandle;
+      const lenshandle = req.body.lens;
       const lensProfiles = await findLensProfileInSameHackathon(hackathonName, lenshandle);
       const response = await urqlClient.query(pingQuery, {
         lensArray: lensProfiles
