@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request';
 import { Client, cacheExchange, fetchExchange } from '@urql/core';
 import like from '../models/like';
-
+import getPOAPS from './POAP';
 import { init, fetchQuery } from "@airstack/node";
 import express, {
     Request,
@@ -103,21 +103,28 @@ const findLensProfileLiked = async (lenshandle: string) => {
     }
   };
 
-router.post("/profileFiltered", async (req: Request, res: Response) => {
+  router.post("/profileFiltered", async (req: Request, res: Response) => {
     try {
-        const hackathonName = req.body.hackathonName;
-        const lenshandle = req.body.lens;
-        const lensProfiles = await findLensProfileNotLikedInSameHackathon(hackathonName, lenshandle);
-        const response = await urqlClient.query(pingQuery, {
-            lensArray: lensProfiles
-        }).toPromise();
-        const items = response.data.profiles.items;
-        res.status(200).json(items);
+      const hackathonName = req.body.hackathonName;
+      const lenshandle = req.body.lens;
+      const lensProfiles = await findLensProfileNotLikedInSameHackathon(hackathonName, lenshandle);
+      const response = await urqlClient.query(pingQuery, {
+        lensArray: lensProfiles
+      }).toPromise();
+  
+      const items = response.data.profiles.items;
+  
+      for (const item of items) {
+        const commonPoaps = await getPOAPS(lenshandle, item.handle);
+        item.commonPoaps = commonPoaps ? commonPoaps : null;
+      }
+  
+      res.status(200).json(items);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            error: error
-        });
+      console.log(error);
+      res.status(500).json({
+        error: error
+      });
     }
-});
+  });
 export default router;

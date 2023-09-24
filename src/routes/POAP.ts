@@ -44,37 +44,33 @@ const POAPInfoQuery = gql`query MyQuery($eventIds: [String!]) {
   }
 }`;
 
-router.post("/commonPoaps", async (req: Request, res: Response) => {
-  try {
 
-    const variables = {
-      lens1: req.body.lens1,
-      lens2: req.body.lens2
-    }
-    const { data, error } = await fetchQuery(commonPOAPQuery, variables);
-    const { user1, user2 } = data;
-    // check if there are poap that have matching eventid between user1 and user2
-    const user1Poaps = user1.poaps;
-    const user2Poaps = user2.poaps;
-    const user1PoapEventIds = user1Poaps.map((poap: { eventId: string }) => poap.eventId);
-    const user2PoapEventIds = user2Poaps.map((poap: { eventId: string }) => poap.eventId);
-    const commonPoapEventIds = user1PoapEventIds.filter((eventId: string) => user2PoapEventIds.includes(eventId));
-    const poapInfo = await fetchQuery(POAPInfoQuery, { eventIds: commonPoapEventIds });
+export default async function getPOAPs(lens1: string, lens2: string) {
+  const variables = {
+    lens1,
+    lens2
+  };
+  const { data, error } = await fetchQuery(commonPOAPQuery, variables);
+  const { user1, user2 } = data;
 
-    if (poapInfo && poapInfo.data && poapInfo.data.PoapEvents && poapInfo.data.PoapEvents.PoapEvent) {
-      res.status(200).json({
-        commonPoapEventIds: poapInfo.data.PoapEvents.PoapEvent
-      });
-    } else {
-      res.status(200).json({
-        commonPoapEventIds: null
-      });
-    }
-  }
-  catch (error) {
-    console.log(error);
+  // check if user1Poaps or user2Poaps is null or undefined
+  if (!user1.poaps || !user2.poaps) {
+    return null;
   }
 
-});
+  const user1Poaps = user1.poaps;
+  const user2Poaps = user2.poaps;
 
-export default router;  
+  const user1PoapEventIds = user1Poaps.map((poap: { eventId: string }) => poap.eventId);
+  const user2PoapEventIds = user2Poaps.map((poap: { eventId: string }) => poap.eventId);
+  const commonPoapEventIds = user1PoapEventIds.filter((eventId: string) => user2PoapEventIds.includes(eventId));
+  const poapInfo = await fetchQuery(POAPInfoQuery, { eventIds: commonPoapEventIds });
+
+  if (poapInfo && poapInfo.data && poapInfo.data.PoapEvents && poapInfo.data.PoapEvents.PoapEvent) {
+    return poapInfo.data.PoapEvents.PoapEvent;
+  } else {
+    return null;
+  }
+}
+
+//export default router;  

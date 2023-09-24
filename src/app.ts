@@ -15,12 +15,11 @@ db.once('open', () => console.log('Connected to Database'));
 
 const app: Express = express();
 app.use(cors()); // Enable CORS for all routes
-import poapRouter from './routes/POAP';
 import newUserRouter from './routes/newUser';
 import likeRouter from './routes/like';
 import profilFilter from './routes/profileFiltered';
 
-app.use("/poap",poapRouter);
+
 app.use("/user",newUserRouter);
 app.use("/like", likeRouter);
 app.use("/profile", profilFilter);

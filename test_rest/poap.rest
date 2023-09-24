@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
     "lens1" : "lejamon.lens",
-    "lens2": "adamd.lens"
+    "lens2": "krkmu.lens"
 }
