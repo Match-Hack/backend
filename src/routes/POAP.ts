@@ -37,7 +37,7 @@ const POAPInfoQuery = gql`query MyQuery($eventIds: [String!]) {
       eventName
       contentValue {
         image {
-          small
+          extraSmall
         }
       }
     }
