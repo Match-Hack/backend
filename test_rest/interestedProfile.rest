@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
     "hackathonName": "ETHGLOBAL_NY",
-    "lenshandle" : "lejamon.lens"
+    "lens" : "lejamon.lens"
 }
