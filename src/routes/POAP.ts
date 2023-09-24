@@ -46,7 +46,6 @@ const POAPInfoQuery = gql`query MyQuery($eventIds: [String!]) {
 
 
 export default async function getPOAPs(lens1: string, lens2: string) {
-  console.log("lens1: " + lens1 + " lens2: " + lens2)
   const variables = {
     lens1,
     lens2

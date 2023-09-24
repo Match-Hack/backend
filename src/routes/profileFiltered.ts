@@ -76,6 +76,26 @@ const pingQuery = gql`query Profiles($lensArray : [Handle!]) {
       }
     }
   }`;
+
+  interface Poap {
+    eventId: string;
+    // add any other properties here
+  }
+
+  function removeDuplicates(poaps: Poap[]) {
+    const uniqueEventIds: string[] = [];
+    const uniquePoaps: Poap[] = [];
+
+    for (const poap of poaps) {
+      if (!uniqueEventIds.includes(poap.eventId)) {
+        uniqueEventIds.push(poap.eventId);
+        uniquePoaps.push(poap);
+      }
+    }
+
+    return uniquePoaps;
+  }
+
 // function to find all the lens profile that are in the same hackathon
 const findLensProfileLiked = async (lenshandle: string) => {
     try {
@@ -117,7 +137,7 @@ const findLensProfileLiked = async (lenshandle: string) => {
       for (const item of items) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         const commonPoaps = await getPOAPS(lenshandle, item.handle);
-        item.commonPoaps = commonPoaps ? commonPoaps : null;
+        item.commonPoaps = commonPoaps ? removeDuplicates(commonPoaps) : null;
       }
   
       res.status(200).json(items);
