@@ -30,30 +30,16 @@ query CommonPOAPs($lens1: Identity!, $lens2: Identity!) {
   }
 `; // Replace with GraphQL Query
 
-const POAPInfoQuery = gql`query MyQuery($eventArray : [String!]) {
-  Poaps(input: {filter: {eventId: {_in: ["6748", "141910", "69"]}}, blockchain: ALL, limit: 50}) {
-    Poap {
+const POAPInfoQuery = gql`query MyQuery($eventIds: [String!]) {
+  PoapEvents(input: {filter: {eventId: {_in: $eventIds}}, blockchain: ALL}) {
+    PoapEvent {
       eventId
-      poapEvent {
-        eventName
-        startDate
-        endDate
-        country
-        city
-        contentValue {
-          image {
-            extraSmall
-            large
-            medium
-            original
-            small
-          }
+      eventName
+      contentValue {
+        image {
+          small
         }
       }
-    }
-    pageInfo {
-      nextCursor
-      prevCursor
     }
   }
 }`;
@@ -73,8 +59,10 @@ router.post("/commonPoaps", async (req: Request, res: Response) => {
         const user1PoapEventIds = user1Poaps.map((poap: { eventId: string }) => poap.eventId);
         const user2PoapEventIds = user2Poaps.map((poap: { eventId: string }) => poap.eventId);
         const commonPoapEventIds = user1PoapEventIds.filter((eventId: string) => user2PoapEventIds.includes(eventId));
+        const poapInfo = await fetchQuery(POAPInfoQuery, { eventIds: commonPoapEventIds });
+       
         res.status(200).json({
-            commonPoapEventIds: commonPoapEventIds
+            commonPoapEventIds: poapInfo.data.PoapEvents.PoapEvent
         })
     }
     catch (error) {
