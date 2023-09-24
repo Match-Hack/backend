@@ -14,15 +14,13 @@ db.on('error', (error) => console.error(error));
 db.once('open', () => console.log('Connected to Database'));
 
 const app: Express = express();
-app.use(
-    cors({
-        origin: "https://lens-app-amber.vercel.app",
-        credentials: true,
-        methods: 'GET, POST, PUT, DELETE',
-        allowedHeaders: 'Authorization, Content-Type',
-        exposedHeaders: 'Access-Control-Allow-Origin',
-    })
-);
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://lens-app-amber.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+    res.setHeader('Access-Control-Expose-Headers', 'Access-Control-Allow-Origin');
+    next();
+});
 import newUserRouter from './routes/newUser';
 import likeRouter from './routes/like';
 import profilFilter from './routes/profileFiltered';
