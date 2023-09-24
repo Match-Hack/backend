@@ -29,6 +29,35 @@ router.post("/like", async (req, res) => {
   }
 });
 
+router.post("/match", async (req, res) => {
+  try {
+    const  lensHandle  = req.body.lensHandle;
+    console.log(lensHandle); 
+
+    // Find all matches where lens1 or lens2 matches the user's lens handle
+    const matches = await match.find({
+      $or: [
+        { lens1: lensHandle },
+        { lens2: lensHandle}
+      ]
+    });
+
+    // Extract the lens handles from the matches
+    const lensHandles = matches.map((match) => {
+      if (match.lens1 === lensHandle) {
+        return match.lens2;
+      } else {
+        return match.lens1;
+      }
+    });
+
+    res.status(200).json({ lensHandles });
+  } catch (error) {
+    console.log("Error in the POST request to retrieve lens handles:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 router.post("/unlike", async (req, res) => {
   try {
     const { from, to } = req.body;

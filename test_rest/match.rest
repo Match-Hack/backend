@@ -1,0 +1,6 @@
+POST http://127.0.0.1:8080/like/match
+Content-Type: application/json
+
+{
+    "lensHandle" : "krkmu.lens"
+}

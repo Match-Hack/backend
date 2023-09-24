@@ -53,6 +53,7 @@ const pingQuery = gql`query Profiles($lensArray : [Handle!]) {
             }
           }
         }
+        ownedBy
         handle
         coverPicture {
           ... on NftImage {
