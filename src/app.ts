@@ -14,15 +14,15 @@ db.on('error', (error) => console.error(error));
 db.once('open', () => console.log('Connected to Database'));
 
 const app: Express = express();
-app.use(cors(
-    {
-      origin: ["https://lens-app-amber.vercel.app","http://lens-app-amber.vercel.app"],
-      credentials: false,
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Referer'],
-      
-    }
-  ))
+
+// Enable CORS for all routes
+app.use(function(req, res, next) {
+    // res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Credentials', "true");
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+    next();
+  });
 import newUserRouter from './routes/newUser';
 import likeRouter from './routes/like';
 import profilFilter from './routes/profileFiltered';
