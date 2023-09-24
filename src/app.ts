@@ -16,7 +16,7 @@ db.once('open', () => console.log('Connected to Database'));
 const app: Express = express();
 app.use(
     cors({
-        origin: "https://lens-bu1pxojmt-match-hack.vercel.app",
+        origin: "https://lens-app-amber.vercel.app",
         credentials: true,
         methods: 'GET, POST, PUT, DELETE',
         allowedHeaders: 'Authorization, Content-Type',
